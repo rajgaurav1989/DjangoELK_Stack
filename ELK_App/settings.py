@@ -126,3 +126,6 @@ SUIT_CONFIG = {
         }
     )
 }
+
+
+ADMIN_EMAIL_PASSWORD = 'raju@1990' 
