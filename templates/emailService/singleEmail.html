@@ -3,16 +3,34 @@
 {% load staticfiles %}
 
 {% block content %}
+    <script>
+
+        function validateForm(){
+            var receiverEmail =  document.getElementById('receiverEmail').value ;
+            var emailSubject =  document.getElementById('emailSubject').value ;
+            var emailBody =  document.getElementById('emailBody').value ;
+            if (receiverEmail == null || emailSubject == null || emailBody == null ){
+                return false ;
+            }
+            if (receiverEmail.trim() == "" || emailSubject.trim() == "" || emailBody.trim() == ""){
+                return false ;
+            }
+            return true ;
+        }
+
+    </script>
+
     <html>Single Mail Service
-        <form>
+        <br>* marked fields are compulsory<br>
+        <form method="POST"  action="/admin/email/singleEmail/" onsubmit="return validateForm()" >
             <br><br>
-                Email Id : <input type="text" name="receiverEmails" value="" style="width: 200px;" /> <br><br>
-                cc Email Ids separated by comma : <input type="text" name="ccEmails" value="" style="width: 600px;" /> <br><br>
-                bcc Email Ids separated by comma : <input type="text" name="bccEmails" value="" style="width: 600px;" /> <br><br>
-                Subject : <input type="text" name="emailSubject" value="" style="width: 600px;" /> <br><br>
-                Message Body : <textarea name="emailBody" style="width: 600px;height:150px" ></textarea>
+                Email Id * : <input type="text" id="receiverEmail" name="receiverEmail" value="" style="width: 200px;" /> <br><br>
+                cc Email Ids separated by comma : <input type="text" id="ccEmails" name="ccEmails" value="" style="width: 600px;" /> <br><br>
+                bcc Email Ids separated by comma : <input type="text" id="bccEmails" name="bccEmails" value="" style="width: 600px;" /> <br><br>
+                Subject * : <input type="text" id="emailSubject" name="emailSubject" value="" style="width: 600px;" /> <br><br>
+                Message Body * : <textarea id="emailBody" name="emailBody" style="width: 600px;height:150px" ></textarea>
             <br><br>
-            <button type="submit">Submit</button>
+            <input type="submit" value="Submit">
         </form>
     </html>
 {% endblock %}
