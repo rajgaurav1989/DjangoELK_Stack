@@ -3,7 +3,16 @@
 {% load staticfiles %}
 
 {% block content %}
-
-    <html>Single Mail Service</html>
-
+    <html>Single Mail Service
+        <form>
+            <br><br>
+                Email Id : <input type="text" name="receiverEmails" value="" style="width: 200px;" /> <br><br>
+                cc Email Ids separated by comma : <input type="text" name="ccEmails" value="" style="width: 600px;" /> <br><br>
+                bcc Email Ids separated by comma : <input type="text" name="bccEmails" value="" style="width: 600px;" /> <br><br>
+                Subject : <input type="text" name="emailSubject" value="" style="width: 600px;" /> <br><br>
+                Message Body : <textarea name="emailBody" style="width: 600px;height:150px" ></textarea>
+            <br><br>
+            <button type="submit">Submit</button>
+        </form>
+    </html>
 {% endblock %}

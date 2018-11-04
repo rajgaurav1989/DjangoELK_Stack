@@ -117,7 +117,7 @@ SUIT_CONFIG = {
     'MENU': (
         'sites',
         {
-            'label': 'Email Service',
+            'label': 'Single Email Service',
             'url' : '/admin/email/singleEmail/'
         },
         {
