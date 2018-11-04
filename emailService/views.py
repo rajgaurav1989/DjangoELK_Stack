@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
+from .forms import BulkUploadForm
 import thread
 import smtplib
 
@@ -14,7 +15,7 @@ def singleEmail(request):
 	try:
 		if (request.method == 'POST'):
 			sender = request.user.email
-			receiverEmail = request.POST.get('receiverEmail')
+			receiverEmail = request.POST.get('receiverEmail').strip()
 			ccEmailIds = [x.strip()
 						  for x in request.POST.get('ccEmails').split(",")]
 			bccEmailIds = [x.strip()
@@ -43,14 +44,43 @@ def singleEmail(request):
 @csrf_exempt
 @login_required
 def bulkEmail(request):
-	if (request.method == 'POST'):
-		return render_to_response("emailService/submit.html",
-								  {},
-								  context_instance=RequestContext(request))
+	if request.method == 'POST':
+		try:
+			form = BulkUploadForm(request.POST, request.FILES)
+			if form.is_valid():
+				try:
+					extension = request.FILES['up_file'].name.split(".")
+					if len(extension) == 1:
+						return render_to_response('emailService/bulkEmail.html',
+												  {
+													  'status_message': 'No file extension found',
+													  'bulkUploadForm': BulkUploadForm()},
+												  context_instance=RequestContext(request))
+					if extension[len(extension) - 1] != "csv":
+						return render_to_response('emailService/bulkEmail.html',
+												  {'status_message': 'Only csv file format supported',
+												   'bulkUploadForm': BulkUploadForm()},
+												  context_instance=RequestContext(request))
+					return render_to_response('emailService/bulkSubmit.html',
+											  {},
+											  context_instance=RequestContext(request))
+				except Exception as e:                    
+					error=str(e)
+
+					return render_to_response('emailService/bulkEmail.html',
+											  {'status_message': 'Upload failed : ' + error, 'bulkUploadForm': BulkUploadForm()},
+											  context_instance=RequestContext(request))
+			else:
+				return render_to_response('emailService/bulkEmail.html',
+										  {'status_message': 'Error message: Unexpected error message ','bulkUploadForm': BulkUploadForm()},
+										  context_instance=RequestContext(request))
+		except:
+			return render_to_response('emailService/bulkEmail.html',
+									  {'status_message': 'Error message: Unexpected error message ','bulkUploadForm': BulkUploadForm()},
+									  context_instance=RequestContext(request))
 	else:
-		return render_to_response("emailService/bulkEmail.html",
-								  {},
-								  context_instance=RequestContext(request))
+		context = {}
+		return render_to_response("emailService/bulkEmail.html",  {'bulkUploadForm': BulkUploadForm()},context_instance=RequestContext(request))
 
 
 def check(sender, receiverEmail, ccEmailIds, bccEmailIds, subject, message):

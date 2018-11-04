@@ -1,16 +1,44 @@
-{% extends "admin/base_site.html" %}
+{% extends "admin/index.html" %}
 
 {% load staticfiles %}
 
 {% block content %}
-
-    <html>Bulk Mail Service <br><br>
+    <div>
+        <h3>Bulk Email Async Service</h3>
+        <br><br>
         File format is <br><br>
         emailId, ccEmailIds, bccEmailIds, subject , body 
+        <br><br> 
+        <p>Multiple Emails are separated by ; semicolon and <b>please don't use comma in any<b> ccEmailIds, bccEmailIds, subject , body <br> use ; in place of ,  </p>
         <br><br>
-        <form method="POST" action="/admin/email/bulkEmail/">
-            <button type="submit">Upload the CSV file</button>
+        <form action="/admin/email/bulkEmail/" method="POST"  class="upload" enctype="multipart/form-data">
+            {{ bulkUploadForm }}
+            <button type="submit" >Upload</button>
         </form>
-    </html>
+
+    </div>
+
+
+    <script type="text/javascript">
+
+        $(document).ready(
+            function(){
+                {% if status_message %}
+                    alert("{{ status_message }}");
+                {% endif %}
+
+                $('button:submit').attr('disabled',true);
+                $('input:file').change(
+                    function(){
+                        if ($(this).val()){
+                            $('button:submit').removeAttr('disabled');
+                        }
+                        else {
+                            $('button:submit').attr('disabled',true);
+                        }
+                    });
+            });
+
+    </script>
 
 {% endblock %}
