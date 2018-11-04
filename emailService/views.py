@@ -7,7 +7,9 @@ from django.conf import settings
 from .forms import BulkUploadForm
 import thread
 import smtplib
+import threading
 
+BULK_SPLITTER = ';'
 
 @csrf_exempt
 @login_required
@@ -61,6 +63,12 @@ def bulkEmail(request):
 												  {'status_message': 'Only csv file format supported',
 												   'bulkUploadForm': BulkUploadForm()},
 												  context_instance=RequestContext(request))
+					fileContent = request.FILES['up_file']
+					
+					fileHandleThread = threading.Thread(target=sendBulkEmail, args=({"fileContent":fileContent,"sender":request.user.email},))
+
+					fileHandleThread.start()
+
 					return render_to_response('emailService/bulkSubmit.html',
 											  {},
 											  context_instance=RequestContext(request))
@@ -101,3 +109,29 @@ def check(sender, receiverEmail, ccEmailIds, bccEmailIds, subject, message):
 		server.quit()
 	except :
 		print 'Exception'
+
+def sendBulkEmail(input) :
+	fileContent = input["fileContent"]
+	sender = input["sender"]
+	lineCtr = 0 
+	for line in fileContent :
+		if line != None and line.strip() != "" :
+			lineCtr += 1
+			if (lineCtr == 1) :
+				continue
+			content = line.strip().split(",")
+			receiverEmail = content[0].strip()
+			ccEmailIds = [x.strip()
+						  for x in content[1].split(BULK_SPLITTER)]
+			bccEmailIds = [x.strip()
+						  for x in content[2].split(BULK_SPLITTER)]
+			subject = content[3]
+			message = content[4]
+			check(sender, receiverEmail, ccEmailIds, bccEmailIds, subject, message)
+
+	print 'raju 115 check number of line sendBulkEmail '+str(lineCtr)+'\t'+sender
+
+
+
+
+
