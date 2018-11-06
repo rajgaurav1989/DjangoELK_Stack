@@ -1,2 +1,5 @@
 Django==1.8.17
 django-suit==0.2.25
+elasticsearch-dsl==6.1.0
+python-logstash
+django-elasticsearch-dsl

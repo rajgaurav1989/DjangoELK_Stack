@@ -8,8 +8,10 @@ from .forms import BulkUploadForm
 import thread
 import smtplib
 import threading
+from .logfile import getLogger
 
 BULK_SPLITTER = ';'
+logger = getLogger()
 
 @csrf_exempt
 @login_required
@@ -29,7 +31,7 @@ def singleEmail(request):
 				'\t'+subject+'\t'+message+'\t'+sender
 
 			thread.start_new_thread(
-				check, (sender, receiverEmail, ccEmailIds, bccEmailIds, subject, message))
+				asyncMail, (sender, receiverEmail, ccEmailIds, bccEmailIds, subject, message,True))
 
 			print 'raju main end'
 			return render_to_response("emailService/submit.html",
@@ -91,9 +93,11 @@ def bulkEmail(request):
 		return render_to_response("emailService/bulkEmail.html",  {'bulkUploadForm': BulkUploadForm()},context_instance=RequestContext(request))
 
 
-def check(sender, receiverEmail, ccEmailIds, bccEmailIds, subject, message):
+def asyncMail(sender, receiverEmail, ccEmailIds, bccEmailIds, subject, message,singleType):
 	try:
-		ccEmailIds.append(sender)
+		if singleType :
+			ccEmailIds.append(sender)
+			
 		payloadMessage = "From: %s\r\n" % sender
 		payloadMessage = payloadMessage + "To: %s\r\n" % receiverEmail
 		payloadMessage = payloadMessage + "CC: %s\r\n" % ",".join(ccEmailIds)
@@ -107,8 +111,10 @@ def check(sender, receiverEmail, ccEmailIds, bccEmailIds, subject, message):
 		server.set_debuglevel(1)
 		server.sendmail(sender, toaddrs, payloadMessage)
 		server.quit()
-	except :
-		print 'Exception'
+		logger.info('raju email has been seen')
+	except Exception as e :
+		print 'Exception in sending mail',e
+		logger.error('raju error in sending mail '+e)
 
 def sendBulkEmail(input) :
 	fileContent = input["fileContent"]
@@ -127,9 +133,8 @@ def sendBulkEmail(input) :
 						  for x in content[2].split(BULK_SPLITTER)]
 			subject = content[3]
 			message = content[4]
-			check(sender, receiverEmail, ccEmailIds, bccEmailIds, subject, message)
-
-	print 'raju 115 check number of line sendBulkEmail '+str(lineCtr)+'\t'+sender
+			asyncMail(sender, receiverEmail, ccEmailIds, bccEmailIds, subject, message,False)
+	asyncMail(sender, sender, [], [], 'Bulk Email Confirmation', 'Bulk Email Sent',True)
 
 
 
