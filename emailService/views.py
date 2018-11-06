@@ -26,14 +26,10 @@ def singleEmail(request):
 						   for x in request.POST.get('bccEmails').split(",")]
 			subject = request.POST.get('emailSubject')
 			message = request.POST.get('emailBody')
-			print receiverEmail+'\t' + \
-				str(ccEmailIds[0])+'\t'+str(bccEmailIds[0]) + \
-				'\t'+subject+'\t'+message+'\t'+sender
-
+			
 			thread.start_new_thread(
 				asyncMail, (sender, receiverEmail, ccEmailIds, bccEmailIds, subject, message,True))
 
-			print 'raju main end'
 			return render_to_response("emailService/submit.html",
 									  {},
 									  context_instance=RequestContext(request))
@@ -42,7 +38,7 @@ def singleEmail(request):
 									  {},
 									  context_instance=RequestContext(request))
 	except Exception as e:
-		print 'Exception ', e
+		logger.error("Exception  "+str(e)+" in submitting the form")
 
 
 @csrf_exempt
@@ -76,6 +72,7 @@ def bulkEmail(request):
 											  context_instance=RequestContext(request))
 				except Exception as e:                    
 					error=str(e)
+					logger.error("Exception  "+error+" in submitting the form")
 
 					return render_to_response('emailService/bulkEmail.html',
 											  {'status_message': 'Upload failed : ' + error, 'bulkUploadForm': BulkUploadForm()},
@@ -94,6 +91,7 @@ def bulkEmail(request):
 
 
 def asyncMail(sender, receiverEmail, ccEmailIds, bccEmailIds, subject, message,singleType):
+	logger.info("email is being sent from "+sender)
 	try:
 		if singleType :
 			ccEmailIds.append(sender)
@@ -111,10 +109,9 @@ def asyncMail(sender, receiverEmail, ccEmailIds, bccEmailIds, subject, message,s
 		server.set_debuglevel(1)
 		server.sendmail(sender, toaddrs, payloadMessage)
 		server.quit()
-		logger.info('raju email has been seen')
+		logger.info('Email from admin has been sent')
 	except Exception as e :
-		print 'Exception in sending mail',e
-		logger.error('raju error in sending mail '+e)
+		logger.error('Error in sending mail '+str(e))
 
 def sendBulkEmail(input) :
 	fileContent = input["fileContent"]
@@ -134,7 +131,7 @@ def sendBulkEmail(input) :
 			subject = content[3]
 			message = content[4]
 			asyncMail(sender, receiverEmail, ccEmailIds, bccEmailIds, subject, message,False)
-	asyncMail(sender, sender, [], [], 'Bulk Email Confirmation', 'Bulk Email Sent',True)
+	asyncMail(sender, sender, [], [], settings.BULK_EMAIL_SUB, settings.BULK_EMAIL_MSG ,True)
 
 
 

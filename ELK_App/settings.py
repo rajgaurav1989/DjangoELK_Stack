@@ -137,4 +137,5 @@ ELASTICSEARCH_DSL={
     },
 }
 
-
+BULK_EMAIL_SUB = 'Bulk Email Confirmation'
+BULK_EMAIL_MSG = 'Bulk Email Sent'
