@@ -5,9 +5,11 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from .forms import BulkUploadForm
+from .elastic_search_connection import EmailIndex
 import thread
 import smtplib
 import threading
+from datetime import datetime
 from .logfile import getLogger
 
 BULK_SPLITTER = ';'
@@ -109,6 +111,8 @@ def asyncMail(sender, receiverEmail, ccEmailIds, bccEmailIds, subject, message,s
 		server.set_debuglevel(1)
 		server.sendmail(sender, toaddrs, payloadMessage)
 		server.quit()
+		esObject = EmailIndex(sender=sender,send_time=datetime.today())
+		esObject.save()
 		logger.info('Email from admin has been sent')
 	except Exception as e :
 		logger.error('Error in sending mail '+str(e))
