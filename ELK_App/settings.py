@@ -129,7 +129,7 @@ SUIT_CONFIG = {
 }
 
 
-ADMIN_EMAIL_PASSWORD = 'raju@1990' 
+ADMIN_EMAIL_PASSWORD = 'password' 
 
 ELASTICSEARCH_DSL={
     'default': {
