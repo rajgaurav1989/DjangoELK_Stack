@@ -9,8 +9,9 @@
         File format is <br><br>
         emailId, ccEmailIds, bccEmailIds, subject , body 
         <br><br> 
-        <p>Multiple Emails are separated by ; semicolon and <b>please don't use comma in any<b> ccEmailIds, bccEmailIds, subject , body <br> use ; in place of ,  </p>
+        <p>Multiple Emails are separated by <b>; semicolon</b> and <b>please don't use comma in any<b> ccEmailIds, bccEmailIds, subject , body <br> use ; in place of ,  </p>
         <br><br>
+        Sample uploadFile format is bulk.csv is in the project folder, please check for reference<br><br>
         <form action="/admin/email/bulkEmail/" method="POST"  class="upload" enctype="multipart/form-data">
             {{ bulkUploadForm }}
             <button type="submit" >Upload</button>
