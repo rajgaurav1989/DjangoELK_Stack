@@ -39,5 +39,5 @@ Steps to run optional task : -
 
 elastic search (/index/type) : -  
 
-/email-send-index/doc/
-/logelk/elkcheck
+1. /email-send-index/doc/
+2. /logelk/elkcheck
