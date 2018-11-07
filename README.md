@@ -28,7 +28,7 @@ steps to Run : -
 13. configure ADMIN_EMAIL_PASSWORD, CRON_EMAIL_PASSWORD,CRON_EMAIL in ELK_App/settings.py
 14. login with you credentials
 15. For gmail , please provide acces to less secure apps, otherwise won't be able to send email
-16. test the app
+16. test the app ,  note the emails are sent in async using threads
 
 
 Steps to run optional task : -
