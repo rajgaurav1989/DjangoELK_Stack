@@ -130,6 +130,8 @@ SUIT_CONFIG = {
 
 
 ADMIN_EMAIL_PASSWORD = 'password' 
+CRON_EMAIL_PASSWORD = 'password'
+CRON_EMAIL = 'rajgaurav1989.bits10@gmail.com'
 
 ELASTICSEARCH_DSL={
     'default': {

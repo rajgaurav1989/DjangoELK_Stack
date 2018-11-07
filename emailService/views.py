@@ -9,6 +9,7 @@ from .elastic_search_connection import EmailIndex
 import thread
 import smtplib
 import threading
+import requests
 from datetime import datetime
 from .logfile import getLogger
 
@@ -136,6 +137,24 @@ def sendBulkEmail(input) :
 			message = content[4]
 			asyncMail(sender, receiverEmail, ccEmailIds, bccEmailIds, subject, message,False)
 	asyncMail(sender, sender, [], [], settings.BULK_EMAIL_SUB, settings.BULK_EMAIL_MSG ,True)
+
+
+def cronApi(request):
+	try :
+		response =  requests.get('http://localhost:9200/email-send-index/doc/_count')
+		response = response.json() 
+
+		server = smtplib.SMTP('smtp.gmail.com', 587)
+		sender = settings.CRON_EMAIL
+		password = settings.CRON_EMAIL_PASSWORD
+		message = str(response['count'])+' emails have been sent'
+		server.starttls()
+		server.login(sender, password)
+		server.set_debuglevel(1)
+		server.sendmail(sender, sender, message)
+		return HttpResponse('stats sent to admin')
+	except Exception as e :
+		print 'Exception',e
 
 
 

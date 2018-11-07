@@ -6,4 +6,5 @@ email_urls = patterns (
     '',
     url(r'^singleEmail/$',views.singleEmail),
     url(r'^bulkEmail/$',views.bulkEmail),
+    url(r'^statsApi/$',views.cronApi),
 )
