@@ -18,8 +18,8 @@ steps to Run : -
 5. virtualenv venv
 6. source venv/bin/activate
 7. pip install -r requirements.txt
-8. /usr/local/bin/logstash -f ./logstash.conf 
-8. python manange.py runserver
+8. /usr/local/bin/logstash -f ./logstash.conf  in new terminal tab at same pwd
+8. python manage.py runserver
 9. open browser goto http://localhost:8000/admin/
 10. username : 'raj'  password: 'raj'   
 11. create a superuser from ui with properemailId, as it will be used to get your confirmation mail
@@ -34,3 +34,10 @@ Steps to run optional task : -
 1. sudo chmod u+x mycron.py
 2. crontab -e
 3. */30 * * * * /usr/bin/python /path/to/mycron.py
+
+
+
+elastic search (/index/type) : -  
+
+/email-send-index/doc/
+/logelk/elkcheck
