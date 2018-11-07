@@ -33,4 +33,4 @@ Steps to run optional task : -
 
 1. sudo chmod u+x mycron.py
 2. crontab -e
-3. */1 * * * * /usr/bin/python /path/to/mycron.py
+3. */30 * * * * /usr/bin/python /path/to/mycron.py
