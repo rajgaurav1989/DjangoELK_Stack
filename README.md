@@ -7,6 +7,7 @@ prerequisite : -
 3. install logstash
 4. install kibana 
 5. pip install virtualenv
+6. For gmail , please provide acces to less secure apps, otherwise won't be able to send email
 
 
 steps to Run : - 
@@ -23,10 +24,11 @@ steps to Run : -
 9. open browser goto http://localhost:8000/admin/
 10. username : 'raj'  password: 'raj'   
 11. create a superuser from ui with properemailId, as it will be used to get your confirmation mail
-12. logout from credentials
+12. logout from my credentials
 13. configure ADMIN_EMAIL_PASSWORD, CRON_EMAIL_PASSWORD,CRON_EMAIL in ELK_App/settings.py
 14. login with you credentials
-15. test the app
+15. For gmail , please provide acces to less secure apps, otherwise won't be able to send email
+16. test the app
 
 
 Steps to run optional task : -
