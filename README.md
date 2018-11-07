@@ -27,3 +27,10 @@ steps to Run : -
 13. configure ADMIN_EMAIL_PASSWORD, CRON_EMAIL_PASSWORD,CRON_EMAIL in ELK_App/settings.py
 14. login with you credentials
 15. test the app
+
+
+Steps to run optional task : -
+
+1. sudo chmod u+x mycron.py
+2. crontab -e
+3. */1 * * * * /usr/bin/python /path/to/mycron.py
